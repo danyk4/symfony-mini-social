@@ -21,3 +21,60 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    # static, gathers before runtime, no dynamic vars
+    #    App\Domain\Service\GreetingService:
+    #        arguments:
+    #            $greet: 'Hello'
+
+    strong_formatter:
+        class: App\Domain\Service\FormatingService
+        factory: [ 'App\Domain\Service\FormatingServiceFactory', 'strongFormatingService' ]
+        tags: [ 'app.formating_service' ]
+
+    cite_formatter:
+        class: App\Domain\Service\FormatingService
+        factory: [ '@App\Domain\Service\FormatingServiceFactory', 'citeFormatingService' ]
+        tags: [ 'app.formating_service' ]
+
+    main_header_formatter:
+        class: App\Domain\Service\FormatingService
+        factory: [ '@App\Domain\Service\FormatingServiceFactory', 'headerFormatingService' ]
+        arguments:
+            $level: 1
+
+    hello_greeter:
+        class: App\Domain\Service\GreetingService
+        arguments:
+            $greet: 'Hello'
+        tags:
+            - { name: 'app.greeting_service', priority: 3 }
+
+    greetings_greeter:
+        class: App\Domain\Service\GreetingService
+        arguments:
+            $greet: 'Greetings'
+        tags:
+            - { name: 'app.greeting_service', priority: 2 }
+
+    hi_greeter:
+        class: App\Domain\Service\GreetingService
+        arguments:
+            $greet: 'Hi'
+        tags:
+            - { name: 'app.greeting_service', priority: 1 }
+
+    list_formatter:
+        class: App\Domain\Service\FormatingService
+        calls:
+            - [ setTag, [ 'ol' ] ]
+
+    list_item_formatter:
+        class: App\Domain\Service\FormatingService
+        calls:
+            - [ setTag, [ 'li' ] ]
+        tags: [ 'app.formating_service' ]
+
+    App\Controller\WorldController:
+        arguments:
+            $formatingService: '@list_formatter'

@@ -2,7 +2,10 @@
 
 namespace App;
 
+use App\Application\Symfony\FormatingCompilerPass;
+use App\Application\Symfony\GreetingCompilerPass;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 
 class Kernel extends BaseKernel
@@ -15,5 +18,11 @@ class Kernel extends BaseKernel
     private function getAllowedEnvs(): array
     {
         return ['prod', 'dev', 'test'];
+    }
+
+    protected function build(ContainerBuilder $container): void
+    {
+        $container->addCompilerPass(new FormatingCompilerPass());
+        $container->addCompilerPass(new GreetingCompilerPass());
     }
 }
