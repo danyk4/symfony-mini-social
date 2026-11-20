@@ -74,7 +74,3 @@ services:
         calls:
             - [ setTag, [ 'li' ] ]
         tags: [ 'app.formating_service' ]
-
-    App\Controller\WorldController:
-        arguments:
-            $formatingService: '@list_formatter'
